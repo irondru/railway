@@ -8,8 +8,8 @@ module StationsMenu
                 "3 - Показать поезда на станции\n" +
                 "4 - Показать онфо о всех поездах на всех станциях\n" +
                 "Enter - << Назад"
-    procs = [ proc { menu_create_station }, #в таком варианте меню я обнаружил один плюс 
-              proc { menu_show_stations }, # - проще править/добавлять, и ненадо переписывать кучу when'ов
+    procs = [ proc { menu_create_station },
+              proc { menu_show_stations }, 
               proc { menu_show_trains_on_station }, 
               proc { menu_show_all_trains_on_stations },
               proc { return } ]    

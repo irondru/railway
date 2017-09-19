@@ -5,10 +5,12 @@ require_relative 'train_menu'
 module MainMenu
   
   class << self
-  
+  #в таком варианте меню я обнаружил несколько плюсов:
+  # - проще править/добавлять и не надо переписывать кучу when'ов 
+  # - избавляемся от похожего кода 
   def call
-    menu_text = "1 - Меню станций\n" +
-                "2 - Меню поезов\n" +
+    menu_text = "1 - Меню станций\n" + 
+                "2 - Меню поезов\n" +  
                 "3 - Меню маршрутов\n" +
                 "Enter - Выход"  
     procs = [ proc { StationsMenu.call }, 
