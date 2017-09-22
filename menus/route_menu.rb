@@ -40,7 +40,7 @@ module RouteMenu
     
     def menu_route_stations_list
       print 'Введите номер маршрута: '
-      Route.find(MainMenu.check_input(gets.chomp.to_s)).stations.each { |station| puts station.name } 
+      Route.find(MainMenu.check_input(gets.to_i)).stations.each { |station| puts station.name } 
     end   
     
     def menu_routes_list
@@ -56,7 +56,7 @@ module RouteMenu
   
     def get_route_by_user
       print 'Введите номер маршрута: '
-      route_number = MainMenu.check_input(gets.chomp.to_s)
+      route_number = MainMenu.check_input(gets.to_i)
       route = Route.find(route_number)
       raise 'Маршрут не найден!' if route.nil?
       route

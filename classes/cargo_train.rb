@@ -11,7 +11,7 @@ class CargoTrain < Train
     end
   end 
   
-  def initialize(number, manufacturer = 'unknown', wagons = 0)
+  def initialize(number, manufacturer = 'unknown', speed = 0)
     super
   end
   

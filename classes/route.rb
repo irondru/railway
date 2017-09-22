@@ -1,6 +1,14 @@
+require_relative '../modules/validation'
+require_relative '../classes/station'
+
 class Route
   
+  include Validation
+  
   attr_reader :stations, :number
+  
+  validate :stations, PRESENCE + ARRTYPE, arrtype: Station
+  validate :number, PRESENCE + TYPE, type: Fixnum
   
   @@routes = {}
   
@@ -19,6 +27,8 @@ class Route
   end
   
   def initialize(number, start_station, finish_station)
+    raise 'Нельзя создать маршрут из одной и той же станции!' if start_station == finish_station
+    raise "Маршрут именем #{@number} уже существует!"  unless Route.find(@number).nil? 
     @stations = [start_station, finish_station]
     @number = number
     validate!
@@ -29,6 +39,7 @@ class Route
   def add_station(station)
     return false if check_station(station) 
     @stations.insert(1, station)
+    validate!
     true 
   end
   
@@ -42,16 +53,6 @@ class Route
   
   def check_station(station)
     @stations.include?(station)
-  end
-  
-  private
-  
-  def validate!
-    raise 'Нельзя создать маршрут из одной и той же станции!' if @stations[0] == @stations[1]
-    raise 'Нельзя создать маршрут в пустоту!' if @stations[0].nil? || @stations[1].nil? 
-    raise 'Неверный формат!' if number !~ /^([a-z]|[0-9]|-){3,32}$/i 
-    raise "Маршрут именем #{@number} уже существует!"  unless Route.find(@number).nil?
-    true
   end
   
 end

@@ -10,7 +10,7 @@ class PassengerTrain < Train
     end
   end
   
-  def initialize(number, manufacturer = 'unknown')
+  def initialize(number, manufacturer = 'unknown', speed = 0)
     super   
   end
   
