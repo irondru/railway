@@ -1,6 +1,8 @@
 require_relative 'wagon'
 require_relative '../modules/manufacturer'
 require_relative '../modules/instance_counter'
+require_relative '../modules/validation'
+require_relative '../modules/accessors'
 require_relative 'route'
 require_relative 'station'
 
@@ -8,9 +10,16 @@ class Train
   
   include Manufacturer
   include InstanceCounter
+  include Validation
+  extend Accessors
   
-  attr_accessor :speed
   attr_reader :wagons, :number, :manufacturer, :route
+  
+  validate :number, PRESENCE + FORMAT, format: /^(p|c){1}-?([a-z]|\d){2}$/i
+  validate :speed, PRESENCE + TYPE, type: Fixnum
+  validate :route, TYPE, type: Route
+
+  attr_accessor_with_history :speed
   
   MAX_WAGONS = 50
   
@@ -30,9 +39,10 @@ class Train
     
   end        
 
-  def initialize(number, manufacturer = 'unknown', wagons)
+  def initialize(number, manufacturer = 'unknown', speed = 0)
+    raise "Поезд с номером #{number} уже существует!" unless Train.find(number).nil?
     @number = number
-    @speed = 0
+    @speed = speed
     @wagons ||= []
     @manufacturer = manufacturer
     validate!
@@ -91,6 +101,7 @@ class Train
   
   def add_route(route)
     @route = route
+    validate!
     @route.stations[0].add_train(self)
     @current_station = 0
   end
@@ -123,13 +134,5 @@ class Train
     @route.stations[@current_station + 1].name
   end
   
-  private
-  
-  def validate!
-    raise 'Номер не может быть пустым!' if @number.nil?
-    raise 'Неверный формат номера!' if @number !~ /^(p|c){1}-?([a-z]|\d){2}$/i
-    raise "Поезд с номером #{@number} уже существует!" unless Train.find(@number).nil?
-    true
-  end
 end
 

@@ -1,10 +1,14 @@
 require_relative '../modules/instance_counter'
+require_relative '../modules/validation'
 
 class Station
   
   include InstanceCounter
+  include Validation
   
-  attr_reader :name, :trains 
+  attr_reader :name, :trains
+  validate :name, PRESENCE 
+  #validate :name, PRESENCE + FORMAT, format: /^([a-z]|[0-9]|-){3,32}$/i 
  
   @@stations = {}
   
@@ -33,8 +37,10 @@ class Station
   end
   
   def initialize(name)
+    name.capitalize!
+    raise "Станция с именем #{name} уже существует!" unless Station.find(name).nil?
+    @name = name
     @trains = []
-    @name = name.capitalize
     validate!
     @@stations[name] = self
     register_instance
@@ -61,14 +67,5 @@ class Station
   def show_trains_by_type(type)
     #@trains.select{|tr| tr.type == type}
   end         
-  
-  private 
-  
-  def validate!
-    raise 'Имя не может быть пустым!' if @name.nil?
-    raise 'Неверное название станции!' if @name !~ /^([a-z]|[0-9]|-){3,32}$/i   
-    raise "Станция с именем #{@name} уже существует!" unless Station.find(@name).nil?
-    true
-  end
   
 end

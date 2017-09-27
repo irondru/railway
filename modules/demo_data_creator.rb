@@ -14,7 +14,7 @@ module DemoData
     puts "Demo data creator start"
     stations_names = ['Nerezinovsk', 'Muhosransk', 'Pripyat', 'Leninburg', 'Blackmesa', 'Las-Venturas', 'City17', 'San-Firerro']
     trains_numbers = ['P42', 'C17', 'C07', 'P23', 'P77', 'P-22', 'C-59', 'C-13', 'P-91']
-    routes_numbers = ['100', '101', '102', '103']
+    routes_numbers = [100, 101, 102, 103]
     # создаем станции
     puts "Create stations..."
     stations_names.each { |name| Station.new(name) }
